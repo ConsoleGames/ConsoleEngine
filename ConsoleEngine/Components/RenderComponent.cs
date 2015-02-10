@@ -8,7 +8,14 @@ namespace ConsoleEngine.Components
 {
     public class RenderComponent : Component
     {
+        public Func<string> GetRepresentation { get; set; }
+
         private Entity target;
+
+        public RenderComponent(Func<string> getRepresentation)
+        {
+            GetRepresentation = getRepresentation;
+        }
 
         public override void Setup(Entity entity)
         {
@@ -17,12 +24,12 @@ namespace ConsoleEngine.Components
 
         public override void Update()
         {
-            if (!target.HasComponent<MovementComponent>() || !target.HasComponent<CharComponent>())
+            if (!target.HasComponent<MovementComponent>())
                 return;
 
             var movement = target.GetComponent<MovementComponent>();
             Console.SetCursorPosition(movement.Position.X, movement.Position.Y);
-            Console.Write(target.GetComponent<CharComponent>().Char);
+            Console.Write(GetRepresentation());
         }
     }
 }
